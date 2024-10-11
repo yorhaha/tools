@@ -21,6 +21,9 @@ def get_client(model_name, service=""):
         base_url = "https://api.deepseek.com/v1"
         api_key = os.getenv("DEEPSEEK_API_KEY")
 
+    else:
+        raise ValueError(f"Unsupported model: {model_name}")
+
     client = OpenAI(
         base_url=base_url,
         api_key=api_key,
@@ -69,8 +72,9 @@ def batch_call_openai(
     retry_times=5,
     show_progress=True,
     print_response=False,
+    service="",
 ):
-    client = get_client(model_name)
+    client = get_client(model_name, service)
 
     responses = [""] * n
     n = len(prompts)
