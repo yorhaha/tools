@@ -27,10 +27,19 @@ def get_client(model_name, service=""):
     return client
 
 
-def call_openai(model_name: str, prompt: str, max_tokens=2048, n=1, temperature=0.8, top_p=1, timeout=60, history=[]):
+def call_openai(
+    model_name: str,
+    prompt: str,
+    max_tokens=2048,
+    n=1,
+    temperature=0.8,
+    top_p=1,
+    timeout=60,
+    system_message="You are a helpful assistant.",
+):
     client = get_client(model_name)
     messages = [
-        *history,
+        {"role": "system", "content": system_message},
         {"role": "user", "content": prompt},
     ]
 
