@@ -6,11 +6,14 @@ from tqdm import tqdm
 from openai import OpenAI
 
 
-def get_client(model_name):
-    base_url = "http://localhost:12001/v1"
-    api_key = os.getenv("VLLM_API_KEY")
-
-    if model_name.startswith("glm"):
+def get_client(model_name, service=""):
+    if service == "vllm":
+        base_url = "http://localhost:12001/v1"
+        api_key = os.getenv("VLLM_API_KEY")
+    elif service == "siliconflow":
+        base_url = "https://api.siliconflow.cn/v1"
+        api_key = os.getenv("SILICONFLOW_API_KEY")
+    elif model_name.startswith("glm"):
         base_url = "https://open.bigmodel.cn/api/paas/v4/"
         api_key = os.getenv("GLM_API_KEY")
     elif model_name.startswith("deepseek"):
