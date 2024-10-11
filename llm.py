@@ -5,9 +5,6 @@ from threading import Thread
 from tqdm import tqdm
 from openai import OpenAI
 
-API_KEY = ""
-BASE_URL = ""
-
 
 def get_client(model_name):
     base_url = "http://localhost:12001/v1"
