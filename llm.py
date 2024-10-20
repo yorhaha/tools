@@ -13,6 +13,9 @@ def get_client(model_name, service=""):
     elif service == "siliconflow":
         base_url = "https://api.siliconflow.cn/v1"
         api_key = os.getenv("SILICONFLOW_API_KEY")
+    elif service == "gptapi.us":
+        base_url = "https://api.gptapi.us/v1"
+        api_key = os.getenv("GPTAPI_US_API_KEY")
 
     elif model_name.startswith("glm"):
         base_url = "https://open.bigmodel.cn/api/paas/v4/"
