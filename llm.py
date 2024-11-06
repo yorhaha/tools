@@ -38,32 +38,40 @@ def call_openai(
     model_name: str,
     prompt: str,
     max_tokens=2048,
+    history=[],
     n=1,
     temperature=0.8,
     top_p=1,
     timeout=60,
     system_message="You are a helpful assistant.",
     service="",
+    retry_times=3,
 ):
     client = get_client(model_name, service)
     messages = [
         {"role": "system", "content": system_message},
+        *history,
         {"role": "user", "content": prompt},
     ]
 
-    completion = client.chat.completions.create(
-        model=model_name,
-        messages=messages,
-        max_tokens=max_tokens,
-        n=n,
-        temperature=temperature,
-        top_p=top_p,
-        timeout=timeout,
-    )
+    for _ in range(retry_times):
+        try:
+            completion = client.chat.completions.create(
+                model=model_name,
+                messages=messages,
+                max_tokens=max_tokens,
+                n=n,
+                temperature=temperature,
+                top_p=top_p,
+                timeout=timeout,
+            )
 
-    response = [choice.message.content.strip() for choice in completion.choices]
+            response = [choice.message.content.strip() for choice in completion.choices]
 
-    return response
+            return response
+        except Exception as e:
+            continue
+    raise ValueError("Fail to connect LLM service:", client.base_url)
 
 
 def batch_call_openai(
